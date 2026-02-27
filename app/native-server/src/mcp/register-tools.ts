@@ -2,6 +2,8 @@ import { Server } from '@modelcontextprotocol/sdk/server/index.js';
 import {
   CallToolRequestSchema,
   CallToolResult,
+  ListPromptsRequestSchema,
+  ListResourcesRequestSchema,
   ListToolsRequestSchema,
 } from '@modelcontextprotocol/sdk/types.js';
 import nativeMessagingHostInstance from '../native-messaging-host';
@@ -77,6 +79,10 @@ export const setupTools = (server: Server) => {
   server.setRequestHandler(CallToolRequestSchema, async (request) =>
     handleToolCall(request.params.name, request.params.arguments || {}),
   );
+
+  // Keep MCP clients that probe resources/prompts from failing.
+  server.setRequestHandler(ListResourcesRequestSchema, async () => ({ resources: [] }));
+  server.setRequestHandler(ListPromptsRequestSchema, async () => ({ prompts: [] }));
 };
 
 const handleToolCall = async (name: string, args: any): Promise<CallToolResult> => {

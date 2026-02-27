@@ -4,10 +4,10 @@ import { setupTools } from './register-tools';
 export let mcpServer: Server | null = null;
 
 export const getMcpServer = () => {
-  if (mcpServer) {
-    return mcpServer;
-  }
-  mcpServer = new Server(
+  // Create a fresh server instance per transport connection.
+  // Reusing a connected instance can fail with:
+  // "Already connected to a transport..."
+  const server = new Server(
     {
       name: 'ChromeMcpServer',
       version: '1.0.0',
@@ -15,10 +15,13 @@ export const getMcpServer = () => {
     {
       capabilities: {
         tools: {},
+        resources: {},
+        prompts: {},
       },
     },
   );
 
-  setupTools(mcpServer);
-  return mcpServer;
+  setupTools(server);
+  mcpServer = server;
+  return server;
 };

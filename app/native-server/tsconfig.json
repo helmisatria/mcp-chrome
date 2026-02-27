@@ -15,6 +15,7 @@
     "resolveJsonModule": true,
     "baseUrl": ".",
     "paths": {
+      "chrome-mcp-shared": ["../../packages/shared/dist/index.d.ts"],
       "chrome-devtools-frontend/*": ["src/shims/devtools.d.ts"]
     }
   },
